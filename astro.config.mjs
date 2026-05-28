@@ -2,23 +2,27 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
-// https://astro.build/config
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'My Docs',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			title: 'Omkar Shendge',
+			description: 'Backend engineer building toward AI infrastructure',
+			social: [
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/omkar619-dev' },
+				{ icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/in/omkar-shendge-43784612b/' },
+			],
 			sidebar: [
 				{
-					label: 'Guides',
+					label: 'Projects',
 					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
+						{ autogenerate: { directory: 'projects' } },
 					],
 				},
 				{
-					label: 'Reference',
-					items: [{ autogenerate: { directory: 'reference' } }],
+					label: 'Engineering',
+					items: [
+						{ autogenerate: { directory: 'engineering' } },
+					],
 				},
 			],
 		}),
