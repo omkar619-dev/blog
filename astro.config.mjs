@@ -24,6 +24,12 @@ export default defineConfig({
 						{ autogenerate: { directory: 'engineering' } },
 					],
 				},
+				{
+					label: 'Musings',
+					items: [
+						{ autogenerate: { directory: 'musings' } },
+					],
+				},
 			],
 		}),
 	],
