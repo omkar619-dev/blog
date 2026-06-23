@@ -125,7 +125,7 @@ Notice the feed orders by `inserted_at` — *when the row landed in your timelin
 
 Pure push has one ugly failure mode: the celebrity. An account with two million followers posting means two million inserts for one post — a write storm. The standard fix, and where I'm heading, is a **hybrid**: push for normal accounts, but for accounts above a follower threshold, *don't* fan out — leave their posts in `posts` and pull them in at read time, merging with the pushed timeline. The schema already supports both: `timelines` for the pushed majority, `idx_posts_author_created` for the pulled celebrities.
 
-That fan-out worker — a separate `cmd/worker` binary fed by RabbitMQ — is the next phase, and the genuinely hard part. It gets its own post once I've hit the inevitable problems.
+That fan-out worker — a separate `cmd/worker` binary fed by RabbitMQ — is the next phase, and the genuinely hard part. [It gets its own post](/projects/fanning-out-the-feed-with-rabbitmq/) once I've hit the inevitable problems.
 
 ## Indexing, honestly
 

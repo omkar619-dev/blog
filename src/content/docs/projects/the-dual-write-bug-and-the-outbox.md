@@ -5,7 +5,7 @@ description: Creating a post wrote to Postgres, then published to RabbitMQ — t
 
 There was a bug in my `POST /posts` handler for months, and I'd even left a comment admitting it: *"the post is already committed; if publishing fails we just log it… known gap."* It's one of the most ordinary bugs in backend work — so ordinary it has a name, the **dual-write problem** — and the fix is a pattern worth knowing cold: the **transactional outbox**. This post is the bug, the fix, and the crash test where I killed the relay mid-flight to prove an event couldn't be lost.
 
-(Builds on the feed's [async fan-out](/projects/designing-news-feed-schema/): when you post, the web request doesn't fan the post out to every follower inline — it drops a `post.created` event on RabbitMQ and a background worker does the slow fan-out and embedding. This post is about making sure that event is *never lost*.)
+(Builds on the feed's [async fan-out](/projects/fanning-out-the-feed-with-rabbitmq/): when you post, the web request doesn't fan the post out to every follower inline — it drops a `post.created` event on RabbitMQ and a background worker does the slow fan-out and embedding. This post is about making sure that event is *never lost*.)
 
 ## The two-line bug
 
