@@ -86,7 +86,7 @@ The payoff: two equally-relevant, equally-fresh posts — one liked, one not —
 ## The honest caveats
 
 - `all-minilm` is small; a larger model would rank better. But the pipeline is **model-agnostic** (`OLLAMA_URL`), so swapping it is a config change plus a one-time re-embed backfill.
-- HNSW is **approximate** — it can occasionally miss the true nearest. Fine for a feed; before trusting it anywhere precision-critical I'd measure **recall@k** with an eval harness (that harness is the next post — because "I think it's good" isn't a number).
+- HNSW is **approximate** — it can occasionally miss the true nearest. Fine for a feed; before trusting it anywhere precision-critical I'd measure **recall@k** with an eval harness ([that harness is the next post](/projects/hybrid-search-and-the-honest-eval/) — because "I think it's good" isn't a number).
 - My dataset is small right now, so the re-rank shifts are subtle in practice. The *pipeline* is the point, not the demo.
 
 ## The lesson
