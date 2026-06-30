@@ -5,6 +5,11 @@ description: A friend asked if he could SSH into my feed. Building the terminal 
 
 A friend, half-joking: *"your feed's just a backend with a REST API… could I `ssh` into it and read it in my terminal?"* Yes — and you can do more than read: **like, comment, reply, follow, delete, all over SSH, with your SSH key as the login.** But here's the part worth writing about: building the terminal UI was the easy bit. The interesting bit was making sure it reused *all* of the backend — zero duplicated logic — which forced a refactor I should have done anyway.
 
+<video controls autoplay muted loop playsinline width="100%" style="border-radius:8px;border:1px solid var(--sl-color-gray-5);margin:1.5rem 0 0.4rem;" src="/demo/ssh-tui.mp4">
+  Your browser can't play this clip — <a href="/demo/ssh-tui.mp4">download it instead</a>.
+</video>
+<p style="text-align:center;font-size:0.85em;opacity:0.7;margin:0;">Liking, commenting, replying, and posting — all over SSH, identified by my public key, on a feed running on a 2008 PC.</p>
+
 (This rides on top of the whole [news-feed](/projects/designing-news-feed-schema/) — same Postgres, same everything. It adds a *front door*, not a feature.)
 
 ## The idea, and the trap
