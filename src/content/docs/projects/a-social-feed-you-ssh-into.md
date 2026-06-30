@@ -114,6 +114,36 @@ service.AddComment(ctx, q, postID, userID, &parentID, content)  // &parentID ⇒
 
 Reload the thread and the [recursive CTE](/projects/threaded-comments-recursive-cte/) returns it one `depth` deeper — so it renders **indented under its parent**: a real nested thread, in a terminal you SSH'd into.
 
+## Where it actually runs
+
+The part I enjoy saying out loud: none of this is on a cloud VM. It runs on a **2008 Core-2-Duo desktop** — my homelab's "Old PC" — as a **[k3s](https://k3s.io)** cluster, installed from a Helm chart.
+
+One Go image, built once, runs as **four roles**, each chosen at container start by which binary its Deployment launches:
+
+| role | job |
+|---|---|
+| `api` | the HTTP/JSON server (2 replicas) |
+| `ssh` | the wish + Bubble Tea front door from this post |
+| `worker` | consumes `post.created`, fans out, embeds via Ollama |
+| `relay` | drains the transactional outbox into RabbitMQ |
+
+They sit in front of the same Postgres (pgvector), RabbitMQ, and Redis. `kubectl get pods` lists the whole thing — eight pods — humming on a machine old enough to vote. Behind every write runs the async chain **post → outbox → relay → RabbitMQ → worker → Ollama → pgvector**; the embedder (Ollama) lives on a beefier box reached over a **[Tailscale](https://tailscale.com)** tunnel, and a post made over SSH gets its vector written back in *well under a second*.
+
+So the real headline isn't "a feed you can SSH into." It's: **one domain core, two front doors, fronting a genuinely distributed system** — multiple services, async messaging, a vector store — deployed on hardware from 2008.
+
+### Try it yourself
+
+It's all [open-source](https://github.com/omkar619-dev/news-feed-go). Because it lives on a home machine over a *private* Tailscale network — no public IP, and I'm not about to open an SSH server to the whole internet from my living room — the honest way to play with it is to **run your own**. It comes up identically anywhere:
+
+```bash
+git clone https://github.com/omkar619-dev/news-feed-go && cd news-feed-go
+docker compose up -d            # Postgres (pgvector) + RabbitMQ + Redis
+# load the schema, start Ollama, run the four binaries — full steps in the README
+ssh -p 23234 localhost          # register your key once, and the feed is yours
+```
+
+The [README](https://github.com/omkar619-dev/news-feed-go#run-it-locally) has the copy-paste version.
+
 ## The honest caveats
 
 - **The service calls run synchronously inside `Update`**, briefly blocking the UI. For single fast queries it's invisible; the idiomatic Bubble Tea fix is to return a `tea.Cmd` that does the work off-loop and sends a result message back. Known shortcut.
