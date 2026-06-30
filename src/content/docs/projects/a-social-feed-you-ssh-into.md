@@ -127,7 +127,7 @@ One Go image, built once, runs as **four roles**, each chosen at container start
 | `worker` | consumes `post.created`, fans out, embeds via Ollama |
 | `relay` | drains the transactional outbox into RabbitMQ |
 
-They sit in front of the same Postgres (pgvector), RabbitMQ, and Redis. `kubectl get pods` lists the whole thing — eight pods — humming on a machine old enough to vote. Behind every write runs the async chain **post → outbox → relay → RabbitMQ → worker → Ollama → pgvector**; the embedder (Ollama) lives on a beefier box reached over a **[Tailscale](https://tailscale.com)** tunnel, and a post made over SSH gets its vector written back in *well under a second*.
+They sit in front of the same Postgres (pgvector), RabbitMQ, and Redis. `kubectl get pods` lists the whole thing — eight pods — humming on a machine old enough to vote. Behind every write runs the async chain **post → outbox → relay → RabbitMQ → worker → Ollama → pgvector** — and *even the embeddings* run on that same box: Ollama on the Core-2-Duo's CPU (no AVX; ~14 s per embed — glacial, but it's async, so nothing waits on it). No second computer is in the loop; the whole system, LLM included, is **self-contained on one 2008 machine**. (I reach it from my laptop over [Tailscale](https://tailscale.com) — but the Old PC does all the actual work.)
 
 So the real headline isn't "a feed you can SSH into." It's: **one domain core, two front doors, fronting a genuinely distributed system** — multiple services, async messaging, a vector store — deployed on hardware from 2008.
 
