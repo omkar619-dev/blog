@@ -19,6 +19,12 @@ export default defineConfig({
 					],
 				},
 				{
+					label: 'Incidents',
+					items: [
+						{ autogenerate: { directory: 'incidents' } },
+					],
+				},
+				{
 					label: 'Musings',
 					items: [
 						{ autogenerate: { directory: 'musings' } },
