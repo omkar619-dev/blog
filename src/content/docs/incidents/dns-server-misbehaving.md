@@ -106,6 +106,12 @@ uptime-kuma   Synced        Healthy
 3. **Pods freeze `/etc/resolv.conf` at creation.** Fix a node's DNS and the pods depending on it won't pick it up on their own — especially CoreDNS. Restart them.
 4. **Read the error literally.** "server misbehaving" plus the resolver's IP named the culprit both times: `[fd7a:...::53]` was Tailscale MagicDNS; `10.43.0.10` was CoreDNS.
 
-## The real fix (still on my list)
+## The real fix (done)
 
-Restarting CoreDNS only holds while the node's resolv.conf *stays* correct — and I've watched Tailscale flip it back. The durable fix is to stop depending on a resolver that has no upstream: either set a **Global Nameserver (`1.1.1.1`)** in the Tailscale admin so MagicDNS can actually resolve public names, or pin the node's resolver so a reboot can't re-arm it. Until that's in place, one restart of the wrong pod could bring the whole gremlin back. *(I'll update this post once it's locked in.)*
+Restarting CoreDNS only holds while the node's resolv.conf *stays* correct — so I fixed the root cause instead of the symptom. MagicDNS was "misbehaving" because it had **no upstream resolver** for public names. The fix, entirely in the Tailscale admin console (DNS page):
+
+1. **Add global nameservers** — `1.1.1.1` (Cloudflare) and `8.8.8.8` (Google).
+2. **Toggle "Override DNS servers" ON.** This is the non-obvious part: with it *off*, Tailscale never actually pushes those nameservers to your devices — `tailscale dns status` reported `(no resolvers configured)`. Turning it *on* pushes them down as the real resolvers.
+3. On the node, **`sudo tailscale set --accept-dns=true`** — accept the now-working Tailscale DNS. (I'd flipped it to `false` that morning as a workaround while MagicDNS was broken; with MagicDNS actually functional, `true` is the correct, reboot-durable state.)
+
+After that, `tailscale dns status` lists `1.1.1.1`/`8.8.8.8` under **Resolvers**, `/etc/resolv.conf` is managed by Tailscale, and a `busybox` `nslookup` *through CoreDNS* resolves cleanly. Tailscale re-applies this config on every boot — so there's nothing to pin and no `chattr` hack to remember. The gremlin can't come back. Root cause, fixed.
