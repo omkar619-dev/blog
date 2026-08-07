@@ -3,17 +3,62 @@ title: Omkar Shendge
 description: Backend engineer building toward AI infrastructure
 template: splash
 hero:
-  tagline: Backend engineer with hands-on experience shipping production distributed systems in Go and Python on Kubernetes. Currently transitioning into AI infrastructure roles.
+  tagline: I build distributed systems in Go and run them on bare metal until they break. This is where I write down what broke and why.
   actions:
-    - text: Read the projects
-      link: /projects/k8s-deployment/
+    - text: Start with the News Feed
+      link: /projects/choosing-postgres-pgvector-over-mongodb/
       icon: right-arrow
       variant: primary
+    - text: Read an incident
+      link: /incidents/the-flag-that-renamed-my-clusters-database/
+      icon: rocket
+      variant: minimal
     - text: GitHub
       link: https://github.com/omkar619-dev
       icon: external
+      variant: minimal
 ---
 
-## What's here
+import { CardGrid, LinkCard, Card } from '@astrojs/starlight/components';
 
-This is where I write about the systems I build. The deep-dive technical posts live under **Projects**.
+## Three ways in
+
+<CardGrid>
+	<LinkCard
+		title="Building a news feed in Go"
+		href="/projects/choosing-postgres-pgvector-over-mongodb/"
+		description="Thirteen posts, in build order — schema and recursive CTEs, RabbitMQ fan-out, idempotency keys, the transactional outbox, then pgvector search and an eval harness that refused to flatter the results."
+	/>
+	<LinkCard
+		title="Incidents"
+		href="/incidents/the-flag-that-renamed-my-clusters-database/"
+		description="Things that broke in production on my own hardware, written up honestly — including the wrong hypothesis I chased first, because that part is usually the interesting one."
+	/>
+	<LinkCard
+		title="Distributed systems from scratch"
+		href="/projects/mapreduce-mit-6584-lab1/"
+		description="MIT 6.5840 labs in Go — MapReduce, then a key/value server with a distributed lock. Written to understand the primitives rather than to use them."
+	/>
+	<LinkCard
+		title="Platform & homelab"
+		href="/projects/gitops-argocd-homelab/"
+		description="A two-node Kubernetes cluster on a 2008 desktop and a Ryzen box. GitOps with ArgoCD, self-hosted object storage, backups with a tested restore."
+	/>
+</CardGrid>
+
+## What this is
+
+Every post here comes from something I actually built and ran, usually on hardware that
+gave me a reason to think harder — a control plane with 4 GB of RAM, a CPU too old for
+modern container images, a GPU that lost driver support years ago.
+
+Constraints like that are useful. They turn "which database should I use" into a question
+with a real answer, and they surface failure modes that a managed platform would have
+quietly absorbed on my behalf.
+
+<Card title="Currently" icon="seti:go">
+	Finishing a real-time chat system in Go — WebSockets with Redis fan-out, Kafka as the
+	durable log, pgvector for semantic search over history, and a RAG assistant running on
+	a local model. Next up: WebRTC calling that works between two real networks, and
+	load-testing the whole thing until something gives.
+</Card>

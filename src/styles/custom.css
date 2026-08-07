@@ -1,0 +1,184 @@
+/* ---------------------------------------------------------------
+   Omkar Shendge — Starlight theme overrides
+   Infrastructure-flavoured: teal accent, tight headings, terminal
+   code blocks. Tuned for long technical reads in both themes.
+   --------------------------------------------------------------- */
+
+/* --- Accent -------------------------------------------------- */
+:root {
+	--sl-color-accent-low: #0c2a2f;
+	--sl-color-accent: #0c93a3;
+	--sl-color-accent-high: #7fe0ea;
+
+	--sl-color-text-accent: var(--sl-color-accent-high);
+	--omkar-glow: rgba(12, 147, 163, 0.35);
+	--omkar-rule: rgba(127, 224, 234, 0.18);
+}
+
+:root[data-theme='light'] {
+	--sl-color-accent-low: #d5edf0;
+	--sl-color-accent: #0a7482;
+	--sl-color-accent-high: #06414a;
+
+	--sl-color-text-accent: var(--sl-color-accent);
+	--omkar-glow: rgba(10, 116, 130, 0.18);
+	--omkar-rule: rgba(10, 116, 130, 0.16);
+}
+
+/* --- Typography ---------------------------------------------- */
+:root {
+	--sl-font: 'Segoe UI Variable', 'Segoe UI', system-ui, -apple-system, 'Inter', sans-serif;
+	--sl-font-mono: 'Cascadia Code', 'JetBrains Mono', 'Consolas', ui-monospace, monospace;
+}
+
+.sl-markdown-content {
+	font-size: 1.0125rem;
+	line-height: 1.72;
+}
+
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3 {
+	letter-spacing: -0.018em;
+	text-wrap: balance;
+}
+
+/* Section rules make long posts scannable without adding chrome. */
+.sl-markdown-content h2 {
+	margin-top: 2.75rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid var(--omkar-rule);
+}
+
+.sl-markdown-content h2 + h3 {
+	margin-top: 1rem;
+}
+
+/* --- Splash hero --------------------------------------------- */
+.hero {
+	position: relative;
+	padding-block: 2rem;
+}
+
+.hero h1 {
+	font-weight: 800;
+	letter-spacing: -0.03em;
+	background: linear-gradient(115deg, var(--sl-color-white) 30%, var(--sl-color-accent-high));
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.hero .tagline {
+	max-width: 56ch;
+	font-size: 1.05rem;
+	line-height: 1.65;
+	color: var(--sl-color-gray-2);
+}
+
+/* Faint grid behind the hero — reads as "infrastructure", not decoration. */
+.hero::before {
+	content: '';
+	position: absolute;
+	inset: -2rem -1rem auto -1rem;
+	height: 320px;
+	z-index: -1;
+	pointer-events: none;
+	opacity: 0.5;
+	background-image:
+		radial-gradient(60% 60% at 20% 0%, var(--omkar-glow), transparent 70%),
+		linear-gradient(var(--omkar-rule) 1px, transparent 1px),
+		linear-gradient(90deg, var(--omkar-rule) 1px, transparent 1px);
+	background-size: 100% 100%, 38px 38px, 38px 38px;
+	mask-image: linear-gradient(to bottom, black, transparent);
+	-webkit-mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+/* --- Cards ---------------------------------------------------- */
+.card {
+	border-radius: 12px;
+	border-color: var(--omkar-rule);
+	transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.card:hover {
+	transform: translateY(-2px);
+	border-color: var(--sl-color-accent);
+	box-shadow: 0 10px 28px -12px var(--omkar-glow);
+}
+
+.card .title {
+	letter-spacing: -0.01em;
+}
+
+/* --- Code ----------------------------------------------------- */
+.expressive-code .frame,
+.sl-markdown-content pre {
+	border-radius: 10px;
+	font-size: 0.9rem;
+}
+
+.sl-markdown-content code:not(pre code) {
+	font-size: 0.875em;
+	padding: 0.15em 0.4em;
+	border-radius: 5px;
+	background: var(--sl-color-accent-low);
+	color: var(--sl-color-text-accent);
+	border: 1px solid var(--omkar-rule);
+}
+
+/* --- Tables --------------------------------------------------- */
+.sl-markdown-content table {
+	font-size: 0.94rem;
+	border-collapse: collapse;
+	display: block;
+	overflow-x: auto;
+}
+
+.sl-markdown-content th {
+	font-weight: 650;
+	text-align: left;
+	background: var(--sl-color-gray-6);
+	white-space: nowrap;
+}
+
+.sl-markdown-content th,
+.sl-markdown-content td {
+	border: 1px solid var(--omkar-rule);
+	padding: 0.55rem 0.8rem;
+	vertical-align: top;
+}
+
+/* --- Blockquotes ---------------------------------------------- */
+.sl-markdown-content blockquote {
+	border-inline-start: 3px solid var(--sl-color-accent);
+	background: var(--sl-color-accent-low);
+	padding: 0.75rem 1rem;
+	border-radius: 0 8px 8px 0;
+	font-style: normal;
+}
+
+/* --- Sidebar -------------------------------------------------- */
+.sidebar-content summary,
+.sidebar-content > ul > li > span {
+	font-size: 0.74rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	font-weight: 700;
+	color: var(--sl-color-text-accent);
+}
+
+.sidebar-content a[aria-current='page'] {
+	font-weight: 650;
+	border-inline-start: 2px solid var(--sl-color-accent);
+}
+
+/* --- Motion --------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+	* {
+		transition: none !important;
+	}
+	.card:hover {
+		transform: none;
+	}
+}
