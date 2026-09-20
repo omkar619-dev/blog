@@ -47,6 +47,15 @@ export default defineConfig({
 							],
 						},
 						{
+							// Ordered as the system was actually built, not alphabetically.
+							label: 'Chat (Go)',
+							collapsed: false,
+							items: [
+								'projects/the-check-whose-answer-expired',
+								'projects/four-attempts-to-test-one-rejection',
+							],
+						},
+						{
 							label: 'Distributed Systems',
 							collapsed: true,
 							items: [
@@ -70,6 +79,7 @@ export default defineConfig({
 					label: 'Incidents',
 					collapsed: false,
 					items: [
+						'incidents/a-dead-consumer-cant-report-its-own-lag',
 						'incidents/the-flag-that-renamed-my-clusters-database',
 						'incidents/kafkas-two-addresses',
 						'incidents/the-machine-didnt-move-its-address-did',
