@@ -28,6 +28,14 @@ export default defineConfig({
 					items: [
 						{
 							// Ordered as the system was actually built, not alphabetically.
+							label: 'driftlab',
+							collapsed: false,
+							items: [
+								'projects/twelve-seconds-of-silence',
+							],
+						},
+						{
+							// Ordered as the system was actually built, not alphabetically.
 							label: 'News Feed (Go)',
 							collapsed: false,
 							items: [
